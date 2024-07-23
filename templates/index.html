@@ -9,11 +9,10 @@
 <body>
     <div class="container">
         <h1>Upload Football Match Video</h1>
-        <form id="uploadForm" enctype="multipart/form-data">
-            <input type="file" id="videoInput" accept="video/*" required>
+        <form action="/upload" method="post" id="uploadForm" enctype="multipart/form-data">
+            <input type="file" name ="file" id="videoInput" accept="video/*" required>
             <button type="submit">Upload Video</button>
         </form>
-        <div id="result"></div>
     </div>
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>

@@ -1,10 +1,10 @@
-from utils import read_video, save_video
-from trackers import Tracker
+import sys
+from utils.video_utils import read_video, save_video
+from trackers.tracker import Tracker
 
-def main():
+def main(video_path, output_video_path):
     print("Starting main function...")
     # Read the video
-    video_path = 'input_videos/madrid vs city.mp4'
     frames = read_video(video_path)
     print("Video read completed.")
 
@@ -21,9 +21,11 @@ def main():
     output_video_frames = tracker.draw_annotations(frames, tracks)
     
     # Save the video
-    output_video_path = 'output_videos/output_video.avi'
     save_video(output_video_frames, output_video_path)
     print("Video saved.")
 
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) != 3:
+        print("Usage: python main.py <input_video_path> <output_video_path>")
+        sys.exit(1)
+    main(sys.argv[1], sys.argv[2])

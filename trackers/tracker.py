@@ -1,3 +1,4 @@
+import torch
 from ultralytics import YOLO
 import supervision as sv
 import pickle

@@ -1,4 +1,4 @@
-document.getElementById('uploadForm').addEventListener('submit', async function (event) {
+document.getElementById('uploadForm').addEventListener('submit', function(event) {
     event.preventDefault();
 
     const videoInput = document.getElementById('videoInput');
@@ -9,31 +9,25 @@ document.getElementById('uploadForm').addEventListener('submit', async function 
     }
 
     const formData = new FormData();
-    formData.append('video', file);
+    formData.append('file', file);
 
     // Show processing animation
-    document.getElementById('result').innerHTML = '<div class="loader"></div>';
+    document.body.innerHTML = `
+        <h1>Processing...</h1>
+        <div class="loader"></div>
+    `;
 
-    try {
-        const response = await fetch('/upload', {
-            method: 'POST',
-            body: formData
-        });
-
-        const result = await response.json();
-        
-         // Hide processing animation and show the video
-         document.getElementById('result').innerHTML = `
-         <p>${result.message}</p>
-         <div class="video-container">
-             <video controls>
-                 <source src="${result.video_path}" type="video/mp4">
-                 Your browser does not support the video tag.
-             </video>
-         </div>
-     `;
- } catch (error) {
-     console.error('Error uploading video:', error);
-     document.getElementById('result').innerText = 'Error uploading video.';
- }
+    fetch('/upload', {
+        method: 'POST',
+        body: formData
+    }).then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
+        } else {
+            alert('Error processing video.');
+        }
+    }).catch(error => {
+        console.error('Error uploading video:', error);
+        alert('Error uploading video.');
+    });
 });
